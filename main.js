@@ -142,9 +142,12 @@ app.get("/characterdata", async(req,res) => {
 })
 
 app.get("/logout", async(req, res) => {
+    console.log(req.session.access_token);
+    req.session.destroy((err) => {
+        console.log(req.session.access_token);
+        res.status(200).json('Logged out successfully');
+    });
     
-    req.session = null;
-    res.status(200).json('Logged out successfully');
     
     
 })
