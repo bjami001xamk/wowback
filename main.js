@@ -53,28 +53,30 @@ let callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
-    req.session.kayttajatiedot = 'testi';
+    //req.session.kayttajatiedot = 'testi';
     console.log(`sessioID:${req.sessionID}`);
-    redisClient.get(req.sessionID, (err, reply) => {
+    /*redisClient.get(req.sessionID, (err, reply) => {
         console.log('rediksen tiedot:')
         console.log(reply);
         if(reply) {
             console.log("Toimii?!?!?")
             res.status(400).send("Already logged in");
         }
-    })
+    })*/
 
 
     if(req.session.access_token) {
         console.log("Toimii?!?!?")
         res.status(400).send("Already logged in");
+    } else{
+        const scopesString = encodeURIComponent('wow.profile');
+        const redirectUriString = encodeURIComponent(callBackUrl);
+        const authorizeUrl
+            = `${AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&scope=${scopesString}&redirect_uri=${redirectUriString}&response_type=code&state=${req.sessionID}`;
+        res.json(authorizeUrl);
     }
 
-    const scopesString = encodeURIComponent('wow.profile');
-    const redirectUriString = encodeURIComponent(callBackUrl);
-    const authorizeUrl
-        = `${AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&scope=${scopesString}&redirect_uri=${redirectUriString}&response_type=code&state=${req.sessionID}`;
-    res.json(authorizeUrl);
+    
     
 });
 
