@@ -48,7 +48,7 @@ app.get('/login', (req, res) => {
 
 app.get('/auth/bnet/callback', async(req, res) => {
     let params = new URLSearchParams();
-    params.append('redirect_uri', "https://localhost:8000/auth/bnet/callback");
+    params.append('redirect_uri', "https://wowback.herokuapp.com/auth/bnet/callback");
     params.append('scope', "wow.profile");
     params.append('grant_type', 'authorization_code');
     params.append('code', req.query.code);
