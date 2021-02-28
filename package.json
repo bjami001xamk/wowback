@@ -5,19 +5,22 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "start": "node main.js",
+    "dev": "nodemon main"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "btoa": "^1.2.1",
+    "connect-redis": "^5.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "memorystore": "^1.6.5",
     "node-fetch": "^2.6.1",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "redis": "^3.0.2"
   }
 }

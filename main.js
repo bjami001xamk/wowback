@@ -3,27 +3,38 @@ var fs = require('fs')
 var https = require('https')
 const app = express();
 var cors = require('cors')
+//const redis = require('redis')
 const port = process.env.PORT || 8000;
 const btoa = require('btoa');
 const fetch = require('node-fetch');
 let session = require('express-session');
-var MemoryStore = require('memorystore')(session)
+//var MemoryStore = require('memorystore')(session)
+let RedisStore = require('connect-redis')(session)
+let redisClient;
+
+if (process.env.REDISTOGO_URL) {
+    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    redisClient = require("redis").createClient(rtg.port, rtg.hostname);
+} else {
+    redisClient = require("redis").createClient();
+}
 
 
 app.use(cors()) 
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(session({ 
-                                        secret: 'keyboard cat', 
-                                        resave: true, 
-                                        saveUninitialized: true,
-                                        store: new MemoryStore({
+app.use(session({
+                store: new RedisStore({ client: redisClient }),
+                secret: 'keyboard cat',
+                resave: false,
+            }));
+
+/*
+store: new MemoryStore({
                                             checkPeriod: 86400000 // prune expired entries every 24h
                                         }),
-                                  }));
-
-
+*/
 
 let CLIENT_ID = "fe6148452f9f433bb0b7ccc766393e72";
 let CLIENT_SECRET = "tconUpiuzW3EA9fYf8TeGrtuF4TsmSal";
