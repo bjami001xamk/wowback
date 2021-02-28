@@ -101,9 +101,13 @@ app.get("/characterdata", async(req,res) => {
 })
 
 
-https.createServer({
+/*http.createServer({
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.cert')
   }, app).listen(port, function () {
-    console.log('Example app listening on port 8000! Go to https://localhost:8000/')
+    console.log(`App running in port ${port}`)
+})*/
+
+app.listen(port, () => {
+    console.log(`App is running in port ${port}`)
 })
