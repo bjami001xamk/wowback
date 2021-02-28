@@ -3,6 +3,7 @@ var fs = require('fs')
 var https = require('https')
 const app = express();
 var cors = require('cors')
+var cookieParser = require('cookie-parser')
 //const redis = require('redis')
 const port = process.env.PORT || 8000;
 const btoa = require('btoa');
@@ -20,7 +21,7 @@ if (process.env.REDISTOGO_URL) {
 } else {
     redisClient = require("redis").createClient();
 }
-
+app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
@@ -28,7 +29,7 @@ app.use(cors({
 }));
 //app.use(require('serve-static')(__dirname + '/../../public'));
 //app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
+//app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(session({
                 store: new RedisStore({ client: redisClient }),
                 secret: 'keyboard cat',
@@ -41,11 +42,6 @@ app.use(session({
                 }
             }));
 
-/*
-store: new MemoryStore({
-                                            checkPeriod: 86400000 // prune expired entries every 24h
-                                        }),
-*/
 
 let CLIENT_ID = "fe6148452f9f433bb0b7ccc766393e72";
 let CLIENT_SECRET = "tconUpiuzW3EA9fYf8TeGrtuF4TsmSal";
