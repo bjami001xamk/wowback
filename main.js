@@ -104,18 +104,20 @@ app.get('/auth/bnet/callback', async(req, res) => {
     redisClient.hmset(req.query.state, { access_token: data.access_token}, (err, res) => {
         console.log("redikseen tallennettu");
     })
-
-    req.sessionStore.get(req.query.state, (err, session) => {   
+    res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+    
+    
+    /*req.sessionStore.get(req.query.state, (err, session) => {   
         session.access_token = data.access_token;
         console.log('Sessio haun jälkeen:');
         console.log(session);
 
         req.sessionStore.set(req.query.state, session, (error) => {
-            res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+            
             
 
         });
-    });
+    });*/
     
     
     
