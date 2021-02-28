@@ -27,7 +27,7 @@ app.use(session({
 
 let CLIENT_ID = "fe6148452f9f433bb0b7ccc766393e72";
 let CLIENT_SECRET = "tconUpiuzW3EA9fYf8TeGrtuF4TsmSal";
-let callBackUrl = "https://localhost:8000/auth/bnet/callback";
+let callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
