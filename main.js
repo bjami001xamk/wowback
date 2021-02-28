@@ -51,7 +51,7 @@ app.get('/login', (req, res) => {
     redisClient.get(req.sessionID, (err, reply) => {
         console.log('rediksen tiedot:')
         console.log(reply);
-        if(reply.access_token) {
+        if(reply) {
             console.log("Toimii?!?!?")
             res.status(400).send("Already logged in");
         }
