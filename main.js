@@ -23,7 +23,7 @@ if (process.env.REDISTOGO_URL) {
     redisClient = require("redis").createClient();
 }
 //app.use(cookieParser());
-
+app.set('trust proxy', 1);
 app.use(cors({
     credentials: true,
     origin:  'https://pedantic-nightingale-fe0a38.netlify.app',
@@ -39,7 +39,7 @@ app.use(session({
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
-                    secure: false,
+                    secure: true,
                     httpOnly:false,
                     maxAge: 60000000,
                     sameSite: 'none'
