@@ -69,8 +69,12 @@ app.get('/auth/bnet/callback', async(req, res) => {
     
     console.log(data);
     
+    console.log('Sessio palatessa:')
+    console.log(req.session);
+
     req.sessionStore.get(req.query.state, (err, session) => {   
         session.access_token = data.access_token;
+        console.log('Sessio haun jälkeen:');
         console.log(session);
 
         req.sessionStore.set(req.query.state, session, (error) => {
