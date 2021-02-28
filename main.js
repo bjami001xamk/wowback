@@ -47,7 +47,7 @@ app.get('/login', (req, res) => {
     console.log(req.session)
     req.session.testi = "test";
     req.session.save();
-
+    console.log(`sessioID:${req.sessionID}`);
     redisClient.get(req.sessionID, (err, reply) => {
         console.log('rediksen tiedot:')
         console.log(reply);
@@ -76,7 +76,8 @@ app.get('/auth/bnet/callback', async(req, res) => {
     params.append('scope', "wow.profile");
     params.append('grant_type', 'authorization_code');
     params.append('code', req.query.code);
-    
+    console.log(`sessioID:${req.sessionID}`);
+    console.log(`stateID:${req.query.state}`);
     const basicAuth = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
     let headers = {
         authorization: `Basic ${basicAuth}`,
