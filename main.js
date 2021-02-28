@@ -39,10 +39,10 @@ app.use(session({
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
-                    secure: true,
+                    secure: false,
                     httpOnly:false,
                     maxAge: 60000000,
-                    sameSite: 'none'
+                    sameSite: 'strict'
                 }
             }));
 
