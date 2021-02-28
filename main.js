@@ -107,11 +107,10 @@ app.get('/auth/bnet/callback', async(req, res) => {
     
     
     
-    redisClient.get(req.query.state, (err, session) => {   
-        console.log(session);
+    req.sessionStore.get(req.query.state, (err, session) => {   
         session.access_token = data.access_token;
         console.log('Sessio haun jälkeen:');
-        
+        console.log(session);
 
         req.sessionStore.set(req.query.state, session, (error) => {
             
@@ -140,6 +139,11 @@ app.get("/characterdata", async(req,res) => {
     let data = await response.json();
     res.json(data);
 
+})
+
+app.get("/logout", async(req, res) => {
+    req.session.destroy();
+    res.status(200).json('Logged out successfully');
 })
 
 
