@@ -52,7 +52,7 @@ let callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
-    
+    req.session.kayttajatiedot = 'testi';
     console.log(`sessioID:${req.sessionID}`);
     redisClient.get(req.sessionID, (err, reply) => {
         console.log('rediksen tiedot:')
