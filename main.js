@@ -22,7 +22,7 @@ if (process.env.REDISTOGO_URL) {
 }
 
 
-app.use(cors()) 
+app.use(cors());
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
@@ -47,6 +47,17 @@ app.get('/login', (req, res) => {
     console.log(req.session)
     req.session.testi = "test";
     req.session.save();
+
+    redisClient.get(req.sessionID, (err, reply) => {
+        console.log('rediksen tiedot:')
+        console.log(reply);
+        if(reply.access_token) {
+            console.log("Toimii?!?!?")
+            res.status(400).send("Already logged in");
+        }
+    })
+
+
     if(req.session.access_token) {
         console.log("Toimii?!?!?")
         res.status(400).send("Already logged in");
@@ -84,6 +95,10 @@ app.get('/auth/bnet/callback', async(req, res) => {
     
     console.log('Sessio palatessa:')
     console.log(req.session);
+
+    redisClient.hmset(req.query.state, { access_token: data.access_token}, (err, res) => {
+        console.log("redikseen tallennettu");
+    })
 
     req.sessionStore.get(req.query.state, (err, session) => {   
         session.access_token = data.access_token;
