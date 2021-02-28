@@ -1,16 +1,11 @@
 const express = require('express')
-var fs = require('fs')
-var https = require('https')
 const app = express();
 var cors = require('cors')
-var cookieParser = require('cookie-parser')
-//const redis = require('redis')
 const port = process.env.PORT || 8000;
 const btoa = require('btoa');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser')
 let session = require('express-session');
-//var MemoryStore = require('memorystore')(session)
 let RedisStore = require('connect-redis')(session)
 let redisClient;
 
@@ -22,15 +17,13 @@ if (process.env.REDISTOGO_URL) {
 } else {
     redisClient = require("redis").createClient();
 }
-//app.use(cookieParser());
+
 app.set('trust proxy', 1);
 app.use(cors({
     credentials: true,
     origin:  'https://pedantic-nightingale-fe0a38.netlify.app',
 }));
-//app.use(require('serve-static')(__dirname + '/../../public'));
-//app.use(require('cookie-parser')());
-//app.use(require('body-parser').urlencoded({ extended: true }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(session({
@@ -137,6 +130,8 @@ app.get('vara', (req, res) => {
 });
 
 app.get("/characterdata", async(req,res) => {
+    console.log('valia');
+    console.log(req.session.access_token);
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.session.access_token}`;
     let response = await fetch(url);
     let data = await response.json();
