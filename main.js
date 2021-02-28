@@ -76,7 +76,8 @@ app.get('/login', (req, res) => {
     const redirectUriString = encodeURIComponent(callBackUrl);
     const authorizeUrl
         = `${AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&scope=${scopesString}&redirect_uri=${redirectUriString}&response_type=code&state=${req.sessionID}`;
-    res.json(authorizeUrl);
+    //res.json(authorizeUrl);
+    res.send('testi');
 });
 
 app.get('/auth/bnet/callback', async(req, res) => {
