@@ -27,7 +27,7 @@ app.use(cors({
     origin:  'https://pedantic-nightingale-fe0a38.netlify.app',
 }));
 //app.use(require('serve-static')(__dirname + '/../../public'));
-app.use(require('cookie-parser')());
+//app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(session({
                 store: new RedisStore({ client: redisClient }),
@@ -37,7 +37,8 @@ app.use(session({
                 cookie: {
                     secure: false,
                     httpOnly:false,
-                    maxAge: 60000000
+                    maxAge: 60000000,
+                    sameSite: 'strict'
                 }
             }));
 
