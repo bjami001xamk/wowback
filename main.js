@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser')
 const port = process.env.PORT || 8000;
 const btoa = require('btoa');
 const fetch = require('node-fetch');
+const bodyParser = require('body-parser')
 let session = require('express-session');
 //var MemoryStore = require('memorystore')(session)
 let RedisStore = require('connect-redis')(session)
@@ -21,7 +22,7 @@ if (process.env.REDISTOGO_URL) {
 } else {
     redisClient = require("redis").createClient();
 }
-app.use(cookieParser());
+//app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
@@ -30,11 +31,13 @@ app.use(cors({
 //app.use(require('serve-static')(__dirname + '/../../public'));
 //app.use(require('cookie-parser')());
 //app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended : true }));
 app.use(session({
                 store: new RedisStore({ client: redisClient }),
                 secret: 'keyboard cat',
                 resave: false,
-                saveUninitialized: true,
+                saveUninitialized: false,
                 cookie: {
                     secure: false,
                     httpOnly:false,
@@ -50,7 +53,6 @@ const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
     
-    req.cookie.testi = "test";
     console.log(`sessioID:${req.sessionID}`);
     redisClient.get(req.sessionID, (err, reply) => {
         console.log('rediksen tiedot:')
