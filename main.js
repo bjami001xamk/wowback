@@ -67,7 +67,7 @@ app.get('/login', (req, res) => {
 
     if(req.session.access_token) {
         console.log("Toimii?!?!?")
-        res.status(400).send("Already logged in");
+        res.status(400).json("Already logged in");
     } else{
         const scopesString = encodeURIComponent('wow.profile');
         const redirectUriString = encodeURIComponent(callBackUrl);
