@@ -74,7 +74,7 @@ app.get('/auth/bnet/callback', async(req, res) => {
         console.log(session);
 
         req.sessionStore.set(req.query.state, session, (error) => {
-            res.redirect("https://localhost:3000/");
+            res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
             
 
         });
