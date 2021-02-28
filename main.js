@@ -22,7 +22,12 @@ if (process.env.REDISTOGO_URL) {
 }
 
 
-app.use(cors());
+app.use(cors({
+    credentials: true,
+    origin: 
+        'https://pedantic-nightingale-fe0a38.netlify.app/'
+    
+}));
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
@@ -69,8 +74,7 @@ app.get('/login', (req, res) => {
     const redirectUriString = encodeURIComponent(callBackUrl);
     const authorizeUrl
         = `${AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&scope=${scopesString}&redirect_uri=${redirectUriString}&response_type=code&state=${req.sessionID}`;
-    res.send('testi22');
-        //res.json(authorizeUrl);
+    res.json(authorizeUrl);
 });
 
 app.get('/auth/bnet/callback', async(req, res) => {
