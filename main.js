@@ -38,7 +38,6 @@ app.use(session({
                     secure: false,
                     httpOnly:false,
                     maxAge: 60000000,
-                    sameSite: 'strict'
                 }
             }));
 
