@@ -22,12 +22,7 @@ if (process.env.REDISTOGO_URL) {
 }
 
 
-app.use(cors({
-    credentials: true,
-    origin: [
-        'https://pedantic-nightingale-fe0a38.netlify.app/'
-    ]
-}));
+app.use(cors());
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
