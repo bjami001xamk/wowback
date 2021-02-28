@@ -107,7 +107,7 @@ app.get('/auth/bnet/callback', async(req, res) => {
     
     
     
-    req.sessionStore.get(req.query.state, (err, session) => {   
+    redisClient.get(req.query.state, (err, session) => {   
         console.log(session);
         session.access_token = data.access_token;
         console.log('Sessio haun jälkeen:');
