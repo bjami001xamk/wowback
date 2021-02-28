@@ -30,6 +30,7 @@ app.use(session({
                 store: new RedisStore({ client: redisClient }),
                 secret: 'keyboard cat',
                 resave: false,
+                cookie: {secure: false}
             }));
 
 /*
