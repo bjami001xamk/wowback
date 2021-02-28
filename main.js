@@ -24,9 +24,7 @@ if (process.env.REDISTOGO_URL) {
 
 app.use(cors({
     credentials: true,
-    origin: 
-        'https://pedantic-nightingale-fe0a38.netlify.app/'
-    
+    origin:  'https://pedantic-nightingale-fe0a38.netlify.app',
 }));
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
@@ -36,7 +34,11 @@ app.use(session({
                 secret: 'keyboard cat',
                 resave: false,
                 saveUninitialized: true,
-                cookie: {secure: false}
+                cookie: {
+                    secure: false,
+                    httponly:false,
+                    maxAge: 600000
+                }
             }));
 
 /*
