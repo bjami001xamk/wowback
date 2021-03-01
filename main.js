@@ -155,7 +155,14 @@ app.get("/characterdata", async(req,res) => {
         allCharacters.map(async (character) => {
             let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
             let mediaData = await mediaResponse.json();
-            character.mediainfo = mediaData;
+            console.log(mediaResponse.status);
+            if(mediaResponse.status === 200) {
+                character.mediainfo = mediaData;
+                character.mediainfo.found = true;
+            } else {
+                character.mediainfo.found = false;
+            }
+            
         })
     ).then(() => {
         console.log('All promises done')
