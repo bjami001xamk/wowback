@@ -21,7 +21,7 @@ if (process.env.REDISTOGO_URL) {
 app.set('trust proxy', 1);
 app.use(cors({
     credentials: true,
-    origin:  'https://pedantic-nightingale-fe0a38.netlify.app',
+    origin:  ['https://pedantic-nightingale-fe0a38.netlify.app',"http://localhost:3000","https://localhost:3000"],
 }));
 
 app.use(bodyParser.json());
