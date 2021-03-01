@@ -148,7 +148,7 @@ app.get("/characterdata", async(req,res) => {
             allCharacters.push(character);
         })
     });
-    allCharacters = allCharacters.sort((a,b) => b - a);
+    allCharacters.sort((a,b) => b.level - a.level);
     
     res.json(allCharacters);
 
