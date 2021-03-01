@@ -158,9 +158,8 @@ app.get("/characterdata", async(req,res) => {
             console.log(mediaResponse.status);
             if(mediaResponse.status === 200) {
                 character.mediainfo = mediaData;
-                character.mediainfo.found = true;
             } else {
-                character.mediainfo.found = false;
+                character.mediainfo = false;
             }
             
         })
