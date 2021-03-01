@@ -144,8 +144,7 @@ app.get("/characterdata", async(req,res) => {
     let data = await response.json();
     let allCharacters = [];
     data.wow_accounts.forEach(account => {
-        console.log(account);
-        account.forEach(character => {
+        account.characters.forEach(character => {
             allCharacters.push(character);
         })
     });    
