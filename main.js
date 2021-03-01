@@ -143,6 +143,7 @@ app.get("/characterdata", async(req,res) => {
     let response = await fetch(url);
     let data = await response.json();
     let allCharacters = [];
+
     data.wow_accounts.forEach(account => {
         account.characters.forEach(character => {
             allCharacters.push(character);
@@ -150,7 +151,24 @@ app.get("/characterdata", async(req,res) => {
     });
     allCharacters.sort((a,b) => b.level - a.level);
     
-    res.json(allCharacters);
+    Promise.all(
+        allCharacters.map(async (character) => {
+            let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
+            let mediaData = await mediaResponse.json();
+            character.mediainfo = mediaData;
+        })
+    ).then(() => {
+        console.log('All promises done')
+        res.json(allCharacters);
+    })
+
+    /*allCharacters.forEach(character => {
+        let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
+        let mediaData = await mediaResponse.json();
+        character.mediainfo = mediaData;
+    })*/
+
+    //res.json(allCharacters);
 
 })
 
