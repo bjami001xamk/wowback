@@ -15,7 +15,10 @@ if (process.env.REDISTOGO_URL) {
 
     redisClient.auth(rtg.auth.split(":")[1]);
 } else {
-    redisClient = require("redis").createClient();
+    //redisClient = require("redis").createClient();
+    var rtg   = require("url").parse('redis://redistogo:222804140dad47372c4175c2f47c4695@soapfish.redistogo.com:10773/');
+    redisClient = require("redis").createClient(rtg.port, rtg.hostname);
+    redisClient.auth(rtg.auth.split(":")[1]);
 }
 
 app.set('trust proxy', 1);
@@ -141,6 +144,7 @@ app.get("/characterdata", async(req,res) => {
     let data = await response.json();
     let allCharacters = [];
     data.wow_accounts.forEach(account => {
+        console.log(account);
         account.forEach(character => {
             allCharacters.push(character);
         })
