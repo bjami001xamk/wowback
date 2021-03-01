@@ -139,7 +139,13 @@ app.get("/characterdata", async(req,res) => {
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.session.access_token}`;
     let response = await fetch(url);
     let data = await response.json();
-    res.json(data);
+    let allCharacters = [];
+    data.wow_accounts.forEach(account => {
+        account.forEach(character => {
+            allCharacters.push(character);
+        })
+    });    
+    res.json(allCharacters);
 
 })
 
