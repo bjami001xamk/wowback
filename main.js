@@ -158,7 +158,7 @@ app.get("/logout", async(req, res) => {
     });
 })
 
-app.get('/characterstatistics', (req, res) => {
+app.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
     let characterName = req.query.characterName;
     let response = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${realm}/${characterName.toLowerCase()}/statistics?namespace=profile-eu&locale=en_eu&access_token=${req.session.access_token}`)
