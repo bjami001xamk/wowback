@@ -52,8 +52,6 @@ app.get('/login', (req, res) => {
 
     console.log(`sessioID:${req.sessionID}`);
     if(req.session.access_token) {
-        console.log("Toimii?!?!?");
-        console.log(req.session.access_token);
         res.status(400).json("Already logged in");
     } else{
         req.session.access_token = false;
@@ -74,8 +72,7 @@ app.get('/auth/bnet/callback', async(req, res) => {
     params.append('scope', "wow.profile");
     params.append('grant_type', 'authorization_code');
     params.append('code', req.query.code);
-    console.log(`sessioID:${req.sessionID}`);
-    console.log(`stateID:${req.query.state}`);
+
     const basicAuth = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
     let headers = {
         authorization: `Basic ${basicAuth}`,
@@ -129,7 +126,7 @@ app.get("/characterdata", async(req,res) => {
         allCharacters.map(async (character) => {
             let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
             let mediaData = await mediaResponse.json();
-            console.log(mediaResponse.status);
+            
             if(mediaResponse.status === 200) {
                 character.mediainfo = mediaData;
             } else {
@@ -161,8 +158,12 @@ app.get("/logout", async(req, res) => {
 app.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
     let characterName = req.query.characterName;
+    console.log(realm);
+    console.log(characterName);
     let response = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${realm}/${characterName.toLowerCase()}/statistics?namespace=profile-eu&locale=en_eu&access_token=${req.session.access_token}`)
     let data = await response.json();
+    console.log(response);
+    console.log(data);
     res.json(data);
 });
 
