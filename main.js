@@ -49,18 +49,8 @@ let callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
-    //req.session.kayttajatiedot = 'testi';
+
     console.log(`sessioID:${req.sessionID}`);
-    /*redisClient.get(req.sessionID, (err, reply) => {
-        console.log('rediksen tiedot:')
-        console.log(reply);
-        if(reply) {
-            console.log("Toimii?!?!?")
-            res.status(400).send("Already logged in");
-        }
-    })*/
-
-
     if(req.session.access_token) {
         console.log("Toimii?!?!?");
         console.log(req.session.access_token);
@@ -99,18 +89,6 @@ app.get('/auth/bnet/callback', async(req, res) => {
     })
     const data = await response.json();
 
-    
-    console.log(data);
-    
-    console.log('Sessio palatessa:')
-    console.log(req.session);
-
-    //redisClient.hmset(req.query.state, { access_token: data.access_token}, (err, res) => {
-    //    console.log("redikseen tallennettu");
-    //})
-    
-    
-    
     req.sessionStore.get(req.query.state, (err, session) => {   
         console.log(session);
         session.access_token = data.access_token;
@@ -125,8 +103,6 @@ app.get('/auth/bnet/callback', async(req, res) => {
     });
     res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
     
-    
-    
 });
 
 
@@ -137,8 +113,6 @@ app.get('vara', (req, res) => {
 });
 
 app.get("/characterdata", async(req,res) => {
-    console.log('valia');
-    console.log(req.session.access_token);
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.session.access_token}`;
     let response = await fetch(url);
     let data = await response.json();
@@ -182,11 +156,14 @@ app.get("/logout", async(req, res) => {
     req.session.destroy((err) => {
         res.status(200).json('Logged out successfully');
     });
-    
-    
-    
 })
 
+app.get('/characterstatistics', (req, res) => {
+    let realm = req.query.realm;
+    let characterName = req.query.characterName;
+    let response = fetch(`https://eu.api.blizzard.com/profile/wow/character/${realm}/${characterName.toLowerCase()}/statistics?namespace=profile-eu&locale=en_eu&access_token=${req.session.access_token}`)
+    res.json();
+});
 
 /*http.createServer({
     key: fs.readFileSync('server.key'),
