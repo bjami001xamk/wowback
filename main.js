@@ -12,10 +12,8 @@ let redisClient;
 if (process.env.REDISTOGO_URL) {
     var rtg   = require("url").parse(process.env.REDISTOGO_URL);
     redisClient = require("redis").createClient(rtg.port, rtg.hostname);
-
     redisClient.auth(rtg.auth.split(":")[1]);
 } else {
-    //redisClient = require("redis").createClient();
     var rtg   = require("url").parse('redis://redistogo:222804140dad47372c4175c2f47c4695@soapfish.redistogo.com:10773/');
     redisClient = require("redis").createClient(rtg.port, rtg.hostname);
     redisClient.auth(rtg.auth.split(":")[1]);
@@ -50,7 +48,6 @@ const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
 
-    console.log(`sessioID:${req.sessionID}`);
     if(req.session.access_token) {
         res.status(400).json("Already logged in");
     } else{
@@ -61,9 +58,6 @@ app.get('/login', (req, res) => {
             = `${AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&scope=${scopesString}&redirect_uri=${redirectUriString}&response_type=code&state=${req.sessionID}`;
         res.json(authorizeUrl);
     }
-
-    
-    
 });
 
 app.get('/auth/bnet/callback', async(req, res) => {
@@ -103,12 +97,6 @@ app.get('/auth/bnet/callback', async(req, res) => {
 });
 
 
-app.get('vara', (req, res) => {
-    if(!req.session.access_token){
-        res.send('error');
-    }
-});
-
 app.get("/characterdata", async(req,res) => {
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.session.access_token}`;
     let response = await fetch(url);
@@ -130,23 +118,16 @@ app.get("/characterdata", async(req,res) => {
             if(mediaResponse.status === 200) {
                 character.mediainfo = mediaData;
             } else {
-                character.mediainfo = false;
+                character.mediainfo = null;
             }
-            
+
+            if(character.mediainfo && 'assets' in character.mediainfo) {
+                character.mediainfo.avatar_url = character.mediainfo.assets[0];
+            }
         })
     ).then(() => {
-        console.log('All promises done')
         res.json(allCharacters);
     })
-
-    /*allCharacters.forEach(character => {
-        let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
-        let mediaData = await mediaResponse.json();
-        character.mediainfo = mediaData;
-    })*/
-
-    //res.json(allCharacters);
-
 })
 
 app.get("/logout", async(req, res) => {
@@ -158,12 +139,8 @@ app.get("/logout", async(req, res) => {
 app.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
     let characterName = req.query.characterName;
-    console.log(realm);
-    console.log(characterName);
     let response = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${realm}/${characterName.toLowerCase()}/statistics?namespace=profile-eu&locale=en_eu&access_token=${req.session.access_token}`)
     let data = await response.json();
-    console.log(response);
-    console.log(data);
     res.json(data);
 });
 
