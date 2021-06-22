@@ -81,15 +81,8 @@ app.get('/auth/bnet/callback', async(req, res) => {
     const data = await response.json();
 
     req.sessionStore.get(req.query.state, (err, session) => {   
-        console.log(session);
         session.access_token = data.access_token;
-        console.log('Sessio haun jälkeen:');
-        
-
         req.sessionStore.set(req.query.state, session, (error) => {
-            
-            
-
         });
     });
     res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
@@ -115,6 +108,7 @@ app.get("/characterdata", async(req,res) => {
             let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
             let mediaData = await mediaResponse.json();
             
+            //This battle.net api returns data in different formats depending on how old the character is or how long ago it was logged in.
             if(mediaResponse.status === 200) {
                 character.mediainfo = mediaData;
             } else {
@@ -123,6 +117,7 @@ app.get("/characterdata", async(req,res) => {
 
             if(character.mediainfo && character.mediainfo.hasOwnProperty('assets')  ) {
                 character.mediainfo.avatar_url = character.mediainfo.assets[0].value;
+                character.mediainfo.render_url = character.mediainfo.assets[0].value;
             }
         })
     ).then(() => {
