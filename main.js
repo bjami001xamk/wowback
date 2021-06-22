@@ -121,7 +121,7 @@ app.get("/characterdata", async(req,res) => {
                 character.mediainfo = null;
             }
 
-            if(character.mediainfo && 'assets' in character.mediainfo) {
+            if(character.mediainfo.hasOwnProperty('assets') && character.mediainfo) {
                 character.mediainfo.avatar_url = character.mediainfo.assets[0];
             }
         })
