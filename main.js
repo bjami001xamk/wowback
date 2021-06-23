@@ -7,17 +7,11 @@ const fetch = require('node-fetch');
 const bodyParser = require('body-parser')
 let session = require('express-session');
 let RedisStore = require('connect-redis')(session)
-let redisClient;
 
-if (process.env.REDISTOGO_URL) {
-    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-    redisClient = require("redis").createClient(rtg.port, rtg.hostname);
-    redisClient.auth(rtg.auth.split(":")[1]);
-} else {
-    var rtg   = require("url").parse('redis://redistogo:222804140dad47372c4175c2f47c4695@soapfish.redistogo.com:10773/');
-    redisClient = require("redis").createClient(rtg.port, rtg.hostname);
-    redisClient.auth(rtg.auth.split(":")[1]);
-}
+var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+let redisClient = require("redis").createClient(rtg.port, rtg.hostname);
+redisClient.auth(rtg.auth.split(":")[1]);
+
 
 app.set('trust proxy', 1);
 app.use(cors({
@@ -108,7 +102,7 @@ app.get("/characterdata", async(req,res) => {
             let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
             let mediaData = await mediaResponse.json();
             
-            //This battle.net api returns data in different formats depending on how old the character is or how long ago it was logged in.
+            //This battle.net api returns data in different formats depending on how old the character is or how long ago the character was logged in.
             if(mediaResponse.status === 200) {
                 character.mediainfo = mediaData;
             } else {
