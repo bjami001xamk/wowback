@@ -133,13 +133,6 @@ app.get('/characterstatistics', async(req, res) => {
     res.json(data);
 });
 
-/*http.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-  }, app).listen(port, function () {
-    console.log(`App running in port ${port}`)
-})*/
-
 app.listen(port, () => {
     console.log(`App is running in port ${port}`)
 })
