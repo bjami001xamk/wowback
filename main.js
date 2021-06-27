@@ -33,7 +33,9 @@ app.use(session({
             }));
 
 const passport = require('./passport');
-            
+
+app.use(passport.initialize());
+app.use(passport.session());      
 app.use('/', controller);
 
 app.get('/auth/battlenet',
