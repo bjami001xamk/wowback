@@ -3,8 +3,6 @@ const app = express();
 let cors = require('cors');
 const controller = require('./controller');
 const port = process.env.PORT || 8000;
-const btoa = require('btoa');
-const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 
 let session = require('express-session');
