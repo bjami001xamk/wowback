@@ -102,6 +102,7 @@ controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.prof
             }
         })
     ).then(() => {
+        console.log(res.cookie);
         res.json(allCharacters);
     })
 });
