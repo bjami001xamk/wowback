@@ -7,7 +7,7 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
-controller.get('/auth/battlenet',
+/*controller.get('/auth/battlenet',
     passport.authenticate('bnet'), { scope:'wow.profile'});
 
 controller.get('/auth/battlenet/callback',
@@ -15,7 +15,7 @@ controller.get('/auth/battlenet/callback',
     function(req, res){
         console.log(req.user);
         res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
-    });
+});*/
 
 
 controller.get('/login', (req, res) => {

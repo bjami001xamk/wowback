@@ -46,6 +46,17 @@ passport.use(new BnetStrategy({
             
 app.use('/', controller);
 
+app.get('/auth/battlenet',
+    passport.authenticate('bnet'), { scope:'wow.profile'});
+
+app.get('/auth/battlenet/callback',
+    passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
+    function(req, res){
+        console.log(req.user);
+        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+});
+
+
 
 app.listen(port, () => {
     console.log(`App is running in port ${port}`)
