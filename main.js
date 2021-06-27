@@ -47,7 +47,9 @@ passport.use(new BnetStrategy({
 app.use('/', controller);
 
 app.get('/auth/battlenet',
-    passport.authenticate('bnet'), { scope:'wow.profile'});
+    passport.authenticate('bnet'), { scope:'wow.profile'}, () => {
+        
+    });
 
 app.get('/auth/battlenet/callback',
     passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
