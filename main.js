@@ -4,6 +4,7 @@ let cors = require('cors');
 const controller = require('./controller');
 const port = process.env.PORT || 8000;
 const bodyParser = require('body-parser');
+const passport = require('passport');
 const BnetStrategy = require('passport-bnet').Strategy;
 
 let session = require('express-session');
