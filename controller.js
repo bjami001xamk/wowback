@@ -18,7 +18,7 @@ controller.get('/auth/battlenet/callback',
 });*/
 
 
-controller.get('/login', passport.authenticate('bnet', { scope:'wow.profile'}), (req, res) => {
+controller.get('/login', (req, res) => {
     console.log(req.user);
     if(req.user.token) {
         res.status(400).json("Already logged in");
