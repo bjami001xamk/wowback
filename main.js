@@ -35,11 +35,12 @@ app.use(session({
                 store: new RedisStore({ client: redisClient }),
                 secret: process.env.SESSION_SECRET,
                 resave: false,
+                proxy: true,
                 saveUninitialized: false,
                 cookie: {
                     secure: true,
                     httpOnly:false,
-                    maxAge: 86400,
+                    maxAge: 8640000,
                     sameSite: 'none'
                 }
             }));
