@@ -76,6 +76,7 @@ controller.get("/characterdata", async(req, res) => {
     console.log(req.user);
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`;
     let response = await fetch(url);
+    console.log(response);
     let data = await response.json();
     let allCharacters = [];
 
