@@ -89,7 +89,7 @@ controller.get("/characterdata", async(req, res) => {
     
     Promise.all(
         allCharacters.map(async (character) => {
-            let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
+            let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.user.token}`);
             let mediaData = await mediaResponse.json();
             
             //This battle.net api returns data in different formats depending on how old the character is or how long ago the character was logged in.
