@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-var cors = require('cors')
+let cors = require('cors')
 const port = process.env.PORT || 8000;
 const btoa = require('btoa');
 const fetch = require('node-fetch');
@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 let session = require('express-session');
 let RedisStore = require('connect-redis')(session)
 
-var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+let rtg   = require("url").parse(process.env.REDISTOGO_URL);
 let redisClient = require("redis").createClient(rtg.port, rtg.hostname);
 redisClient.auth(rtg.auth.split(":")[1]);
 
@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(session({
                 store: new RedisStore({ client: redisClient }),
-                secret: 'keyboard cat',
+                secret: process.env.SESSION_SECRET,
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
@@ -35,9 +35,9 @@ app.use(session({
             }));
 
 
-let CLIENT_ID = "fe6148452f9f433bb0b7ccc766393e72";
-let CLIENT_SECRET = "tconUpiuzW3EA9fYf8TeGrtuF4TsmSal";
-let callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
 app.get('/login', (req, res) => {
