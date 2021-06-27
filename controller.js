@@ -70,7 +70,7 @@ controller.get('/auth/bnet/callback', async(req, res) => {
 });
 */
 
-controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }), async(req, res) => {
+controller.get("/characterdata", passport.authenticate('bnet'), async(req, res) => {
     console.log('cookie:')
     console.log(res.cookie);
     console.log(req.user);
