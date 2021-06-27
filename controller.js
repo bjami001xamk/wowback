@@ -95,6 +95,11 @@ controller.get("/logout", async(req, res) => {
 controller.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
     let characterName = req.query.characterName;
+
+    if(!realm || !characterName) {
+        return res.status(400).json('Missing realm and/or character name');
+    }
+
     let response = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${realm}/${characterName.toLowerCase()}/statistics?namespace=profile-eu&locale=en_eu&access_token=${req.session.access_token}`)
     let data = await response.json();
     res.json(data);
