@@ -12,7 +12,7 @@ let RedisStore = require('connect-redis')(session);
 let rtg   = require("url").parse(process.env.REDISTOGO_URL);
 let redisClient = require("redis").createClient(rtg.port, rtg.hostname);
 redisClient.auth(rtg.auth.split(":")[1]);
-
+const callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 
 app.set('trust proxy', 1);
 app.use(cors({
@@ -38,7 +38,7 @@ app.use(session({
 passport.use(new BnetStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://localhost:3000/oauth/battlenet/callback",
+    callbackURL: callBackUrl,
     region: "eu"
 }, function(accessToken, refreshToken, profile, done) {
     return done(null, profile);
