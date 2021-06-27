@@ -19,6 +19,7 @@ controller.get('/auth/battlenet/callback',
 
 
 controller.get('/login', passport.authenticate('bnet', { scope:'wow.profile'}), (req, res) => {
+    console.log(req.user);
     if(req.user.token) {
         res.status(400).json("Already logged in");
     } else {
@@ -69,10 +70,40 @@ controller.get('/auth/bnet/callback', async(req, res) => {
 });
 */
 
-controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
-    function(req, res){
-        console.log(req.user);
-        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }), async(req, res) => {
+    console.log(req.user);
+    let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`;
+    let response = await fetch(url);
+    let data = await response.json();
+    let allCharacters = [];
+
+    data.wow_accounts.forEach(account => {
+        account.characters.forEach(character => {
+            allCharacters.push(character);
+        })
+    });
+    allCharacters.sort((a,b) => b.level - a.level);
+    
+    Promise.all(
+        allCharacters.map(async (character) => {
+            let mediaResponse = await fetch(`https://eu.api.blizzard.com/profile/wow/character/${character.realm.slug}/${character.name.toLowerCase()}/character-media?namespace=profile-eu&access_token=${req.session.access_token}`);
+            let mediaData = await mediaResponse.json();
+            
+            //This battle.net api returns data in different formats depending on how old the character is or how long ago the character was logged in.
+            if(mediaResponse.status === 200) {
+                character.mediainfo = mediaData;
+            } else {
+                character.mediainfo = null;
+            }
+
+            if(character.mediainfo && character.mediainfo.hasOwnProperty('assets')  ) {
+                character.mediainfo.avatar_url = character.mediainfo.assets[0].value;
+                character.mediainfo.render_url = character.mediainfo.assets[2].value;
+            }
+        })
+    ).then(() => {
+        res.json(allCharacters);
+    })
 });
 
 
