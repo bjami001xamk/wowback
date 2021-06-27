@@ -20,6 +20,15 @@ app.use(cors({
     origin:  ['https://pedantic-nightingale-fe0a38.netlify.app',"http://localhost:3000","https://localhost:3000"],
 }));
 
+passport.use(new BnetStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: callBackUrl,
+    region: "eu"
+}, function(accessToken, refreshToken, profile, done) {
+    return done(null, profile);
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(session({
@@ -34,15 +43,9 @@ app.use(session({
                     sameSite: 'none'
                 }
             }));
+app.use(passport.initialize());
+app.use(passport.session());
 
-passport.use(new BnetStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: callBackUrl,
-    region: "eu"
-}, function(accessToken, refreshToken, profile, done) {
-    return done(null, profile);
-}));
             
 app.use('/', controller);
 
