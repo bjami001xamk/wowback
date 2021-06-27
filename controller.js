@@ -15,7 +15,7 @@ controller.get('/login', (req, res) => {
     }
 });
 
-controller.get("/characterdata", async(req, res) => {
+controller.get("/characterdata", passport.authenticate('token', { session: false }), async(req, res) => {
     let response = await fetch(`https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`);
     let data = await response.json();
     let allCharacters = [];
