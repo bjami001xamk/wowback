@@ -2,18 +2,14 @@ const router = require('express').Router();
 const fetch = require('node-fetch');
 const passport = require('passport');
 
-router.get('/auth/battlenet',
-    passport.authenticate('bnet', { scope:'wow.profile'}), 
-    () => {
+router.get('/auth/battlenet', passport.authenticate('bnet', { scope:'wow.profile'}), () => {
 });
 
-router.get('/auth/bnet/callback',
-    passport.authenticate('bnet', { scope:'wow.profile' }),
-    function(req, res){
-        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+router.get('/auth/bnet/callback', passport.authenticate('bnet', { scope:'wow.profile' }), (req, res) => {
+    res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
 });
 
-router.get('/login', (req, res) => {
+router.get('/checklogin', (req, res) => {
     if(req.user) {
         res.status(200).json("Already logged in");
     } else {
