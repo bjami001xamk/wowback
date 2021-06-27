@@ -20,7 +20,7 @@ controller.get('/auth/battlenet/callback',
 
 controller.get('/login', (req, res) => {
     console.log(req.user);
-    if(req.user.token) {
+    if(req.user) {
         res.status(400).json("Already logged in");
     } else {
         res.status(401).json('Login required');
@@ -71,6 +71,8 @@ controller.get('/auth/bnet/callback', async(req, res) => {
 */
 
 controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }), async(req, res) => {
+    console.log('cookie:')
+    console.log(res.cookie);
     console.log(req.user);
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`;
     let response = await fetch(url);
