@@ -8,9 +8,8 @@ router.get('/auth/battlenet',
 });
 
 router.get('/auth/bnet/callback',
-    passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
+    passport.authenticate('bnet', { scope:'wow.profile' }),
     function(req, res){
-        console.log(req.user);
         res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
 });
 
@@ -21,6 +20,11 @@ router.get('/login', (req, res) => {
         res.status(401).json('Login required');
     }
 });
+
+router.get("/logout", async(req, res) => {
+    req.logout();
+    res.status(200).json('Logged out successfully');
+})
 
 router.get("/characterdata", async(req, res) => {
     let response = await fetch(`https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`);
@@ -56,11 +60,6 @@ router.get("/characterdata", async(req, res) => {
         res.json(allCharacters);
     })
 });
-
-router.get("/logout", async(req, res) => {
-    req.logout();
-    res.status(200).json('Logged out successfully');
-})
 
 router.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
