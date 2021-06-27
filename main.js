@@ -4,6 +4,7 @@ let cors = require('cors');
 const controller = require('./controller');
 const port = process.env.PORT || 8000;
 const bodyParser = require('body-parser');
+const BnetStrategy = require('passport-bnet').Strategy;
 
 let session = require('express-session');
 let RedisStore = require('connect-redis')(session);
@@ -32,6 +33,16 @@ app.use(session({
                     sameSite: 'none'
                 }
             }));
+
+passport.use(new BnetStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "https://localhost:3000/oauth/battlenet/callback",
+    region: "eu"
+}, function(accessToken, refreshToken, profile, done) {
+    return done(null, profile);
+}));
+            
 app.use('/', controller);
 
 
