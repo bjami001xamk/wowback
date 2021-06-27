@@ -1,8 +1,20 @@
-const controller = require('express').Router();
+const router = require('express').Router();
 const fetch = require('node-fetch');
 
 
-controller.get('/login', (req, res) => {
+router.get('/auth/battlenet',
+    passport.authenticate('bnet', { scope:'wow.profile'}), 
+    () => {
+});
+
+router.get('/auth/bnet/callback',
+    passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
+    function(req, res){
+        console.log(req.user);
+        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+});
+
+router.get('/login', (req, res) => {
     if(req.user) {
         res.status(200).json("Already logged in");
     } else {
@@ -10,7 +22,7 @@ controller.get('/login', (req, res) => {
     }
 });
 
-controller.get("/characterdata", async(req, res) => {
+router.get("/characterdata", async(req, res) => {
     let response = await fetch(`https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.user.token}`);
     let data = await response.json();
     let allCharacters = [];
@@ -45,12 +57,12 @@ controller.get("/characterdata", async(req, res) => {
     })
 });
 
-controller.get("/logout", async(req, res) => {
+router.get("/logout", async(req, res) => {
     req.logout();
     res.status(200).json('Logged out successfully');
 })
 
-controller.get('/characterstatistics', async(req, res) => {
+router.get('/characterstatistics', async(req, res) => {
     let realm = req.query.realm;
     let characterName = req.query.characterName;
 
@@ -63,4 +75,4 @@ controller.get('/characterstatistics', async(req, res) => {
     res.json(data);
 });
 
-module.exports = controller;
+module.exports = router;
