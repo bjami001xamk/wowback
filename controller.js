@@ -7,8 +7,18 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const callBackUrl = "https://wowback.herokuapp.com/auth/bnet/callback";
 const AUTHORIZE_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
 
-controller.get('/login', (req, res) => {
+controller.get('/auth/battlenet',
+    passport.authenticate('bnet'), { scope:'wow.profile'});
 
+controller.get('/auth/battlenet/callback',
+    passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
+    function(req, res){
+        console.log(req.user);
+        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+    });
+
+
+controller.get('/login', (req, res) => {
     if(req.session.access_token) {
         res.status(400).json("Already logged in");
     } else{
@@ -20,7 +30,7 @@ controller.get('/login', (req, res) => {
         res.json(authorizeUrl);
     }
 });
-
+/*
 controller.get('/auth/bnet/callback', async(req, res) => {
     let params = new URLSearchParams();
     params.append('redirect_uri', "https://wowback.herokuapp.com/auth/bnet/callback");
@@ -49,9 +59,17 @@ controller.get('/auth/bnet/callback', async(req, res) => {
     res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
     
 });
+*/
+
+controller.get("/characterdata", passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
+    function(req, res){
+        console.log(req.user);
+        res.redirect("https://pedantic-nightingale-fe0a38.netlify.app/");
+});
 
 
-controller.get("/characterdata", async(req,res) => {
+/*async(req,res) => {
+    
     let url = `https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&access_token=${req.session.access_token}`;
     let response = await fetch(url);
     let data = await response.json();
@@ -85,7 +103,7 @@ controller.get("/characterdata", async(req,res) => {
         res.json(allCharacters);
     })
 })
-
+*/
 controller.get("/logout", async(req, res) => {
     req.session.destroy((err) => {
         res.status(200).json('Logged out successfully');
