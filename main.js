@@ -52,7 +52,7 @@ app.get('/auth/battlenet',
 
 });
 
-app.get('/auth/battlenet/callback',
+app.get('/auth/bnet/callback',
     passport.authenticate('bnet', { scope:'wow.profile', failureRedirect: '/' }),
     function(req, res){
         console.log(req.user);
