@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const fetch = require('node-fetch');
-
+const passport = require('passport');
 
 router.get('/auth/battlenet',
     passport.authenticate('bnet', { scope:'wow.profile'}), 
